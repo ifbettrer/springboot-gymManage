@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gym.mapper.GymCourMapper">
+
+    <resultMap type="GymCour" id="GymCourResult">
+        <result property="courseId"    column="course_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="courseDuration"    column="course_duration"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGymCourVo">
+        select course_id, course_name, teacher_name, start_time, course_duration, remark, create_by, create_time, update_by, update_time from gym_cour
+    </sql>
+
+    <select id="selectGymCourList" parameterType="GymCour" resultMap="GymCourResult">
+        <include refid="selectGymCourVo"/>
+        <where>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="courseDuration != null "> and course_duration = #{courseDuration}</if>
+        </where>
+    </select>
+
+    <select id="selectGymCourById" parameterType="Long" resultMap="GymCourResult">
+        <include refid="selectGymCourVo"/>
+        where course_id = #{courseId}
+    </select>
+
+    <insert id="insertGymCour" parameterType="GymCour" useGeneratedKeys="true" keyProperty="courseId">
+        insert into gym_cour
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseName != null">course_name,</if>
+            <if test="teacherName != null">teacher_name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="courseDuration != null">course_duration,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseName != null">#{courseName},</if>
+            <if test="teacherName != null">#{teacherName},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="courseDuration != null">#{courseDuration},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGymCour" parameterType="GymCour">
+        update gym_cour
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="teacherName != null">teacher_name = #{teacherName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="courseDuration != null">course_duration = #{courseDuration},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where course_id = #{courseId}
+    </update>
+
+    <delete id="deleteGymCourById" parameterType="Long">
+        delete from gym_cour where course_id = #{courseId}
+    </delete>
+
+<!--    <delete id="deleteGymCourByCourseIds" parameterType="String">-->
+<!--        delete from gym_cour where course_id in-->
+<!--        <foreach item="courseId" collection="array" open="(" separator="," close=")">-->
+<!--            #{courseId}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+</mapper>

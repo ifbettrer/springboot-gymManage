@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gym.mapper.GymEmployeeMapper">
+
+    <resultMap type="GymEmployee" id="GymEmployeeResult">
+        <result property="employeeId"    column="employee_id"    />
+        <result property="employeeName"    column="employee_name"    />
+        <result property="employeeSex"    column="employee_sex"    />
+        <result property="employeeAge"    column="employee_age"    />
+        <result property="vocation"    column="vocation"    />
+        <result property="employeePhone"    column="employee_phone"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGymEmployeeVo">
+        select employee_id, employee_name, employee_sex, employee_age, vocation, employee_phone, create_by, create_time, update_by, update_time from gym_employee
+    </sql>
+
+    <select id="selectEmployeeList" parameterType="GymEmployee" resultMap="GymEmployeeResult">
+        <include refid="selectGymEmployeeVo"/>
+        <where>
+            <if test="employeeName != null  and employeeName != ''"> and employee_name like concat('%', #{employeeName}, '%')</if>
+            <if test="employeeSex != null  and employeeSex != ''"> and employee_sex = #{employeeSex}</if>
+            <if test="employeeAge != null "> and employee_age = #{employeeAge}</if>
+            <if test="vocation != null  and vocation != ''"> and vocation = #{vocation}</if>
+            <if test="employeePhone != null  and employeePhone != ''"> and employee_phone = #{employeePhone}</if>
+        </where>
+    </select>
+
+    <select id="selectGymEmployeeById" parameterType="Long" resultMap="GymEmployeeResult">
+        <include refid="selectGymEmployeeVo"/>
+        where employee_id = #{employeeId}
+    </select>
+
+    <insert id="insertGymEmployee" parameterType="GymEmployee" useGeneratedKeys="true" keyProperty="employeeId">
+        insert into gym_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeName != null and employeeName != ''">employee_name,</if>
+            <if test="employeeSex != null and employeeSex != ''">employee_sex,</if>
+            <if test="employeeAge != null">employee_age,</if>
+            <if test="vocation != null and vocation != ''">vocation,</if>
+            <if test="employeePhone != null">employee_phone,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="employeeName != null and employeeName != ''">#{employeeName},</if>
+            <if test="employeeSex != null and employeeSex != ''">#{employeeSex},</if>
+            <if test="employeeAge != null">#{employeeAge},</if>
+            <if test="vocation != null and vocation != ''">#{vocation},</if>
+            <if test="employeePhone != null">#{employeePhone},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteGymEmployeeById" parameterType="Long">
+        delete from gym_employee where employee_id = #{employeeId}
+    </delete>
+
+    <update id="updateGymEmployee" parameterType="GymEmployee">
+        update gym_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="employeeName != null and employeeName != ''">employee_name = #{employeeName},</if>
+            <if test="employeeSex != null and employeeSex != ''">employee_sex = #{employeeSex},</if>
+            <if test="employeeAge != null">employee_age = #{employeeAge},</if>
+            <if test="vocation != null and vocation != ''">vocation = #{vocation},</if>
+            <if test="employeePhone != null">employee_phone = #{employeePhone},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where employee_id = #{employeeId}
+    </update>
+
+</mapper>

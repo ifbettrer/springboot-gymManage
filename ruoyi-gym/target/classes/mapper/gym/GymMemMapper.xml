@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gym.mapper.GymMemMapper">
+
+    <resultMap type="GymMem" id="GymMemResult">
+        <result property="memId"    column="mem_id"    />
+        <result property="memName"    column="mem_name"    />
+        <result property="memSex"    column="mem_sex"    />
+        <result property="memAge"    column="mem_age"    />
+        <result property="memHeight"    column="mem_height"    />
+        <result property="memWeight"    column="mem_weight"    />
+        <result property="memPhone"    column="mem_phone"    />
+        <result property="buyLesson"    column="buy_lesson"    />
+        <result property="restLesson"    column="rest_lesson"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGymMemVo">
+        select mem_id, mem_name, mem_sex, mem_age, mem_height, mem_weight, mem_phone, buy_lesson, rest_lesson, create_by, create_time, update_by, update_time from gym_mem
+    </sql>
+
+    <select id="selectGymMemList" parameterType="GymMem" resultMap="GymMemResult">
+        <include refid="selectGymMemVo"/>
+        <where>
+            <if test="memName != null  and memName != ''"> and mem_name like concat('%', #{memName}, '%')</if>
+            <if test="memSex != null  and memSex != ''"> and mem_sex = #{memSex}</if>
+            <if test="memAge != null "> and mem_age = #{memAge}</if>
+            <if test="memHeight != null "> and mem_height = #{memHeight}</if>
+            <if test="memWeight != null "> and mem_weight = #{memWeight}</if>
+            <if test="memPhone != null  and memPhone != ''"> and mem_phone = #{memPhone}</if>
+            <if test="buyLesson != null "> and buy_lesson = #{buyLesson}</if>
+            <if test="restLesson != null "> and rest_lesson = #{restLesson}</if>
+        </where>
+    </select>
+
+    <select id="selectGymMemByMemId" parameterType="Long" resultMap="GymMemResult">
+        <include refid="selectGymMemVo"/>
+        where mem_id = #{memId}
+    </select>
+
+    <select id="selectGymMemByMemName" parameterType="String" resultMap="GymMemResult">
+        <include refid="selectGymMemVo"/>
+        where mem_name = #{memName}
+    </select>
+
+    <insert id="insertGymMem" parameterType="GymMem" useGeneratedKeys="true" keyProperty="memId">
+        insert into gym_mem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memName != null and memName != ''">mem_name,</if>
+            <if test="memSex != null">mem_sex,</if>
+            <if test="memAge != null">mem_age,</if>
+            <if test="memHeight != null">mem_height,</if>
+            <if test="memWeight != null">mem_weight,</if>
+            <if test="memPhone != null">mem_phone,</if>
+            <if test="buyLesson != null">buy_lesson,</if>
+            <if test="restLesson != null">rest_lesson,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memName != null and memName != ''">#{memName},</if>
+            <if test="memSex != null">#{memSex},</if>
+            <if test="memAge != null">#{memAge},</if>
+            <if test="memHeight != null">#{memHeight},</if>
+            <if test="memWeight != null">#{memWeight},</if>
+            <if test="memPhone != null">#{memPhone},</if>
+            <if test="buyLesson != null">#{buyLesson},</if>
+            <if test="restLesson != null">#{restLesson},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGymMem" parameterType="GymMem">
+        update gym_mem
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memName != null and memName != ''">mem_name = #{memName},</if>
+            <if test="memSex != null">mem_sex = #{memSex},</if>
+            <if test="memAge != null">mem_age = #{memAge},</if>
+            <if test="memHeight != null">mem_height = #{memHeight},</if>
+            <if test="memWeight != null">mem_weight = #{memWeight},</if>
+            <if test="memPhone != null">mem_phone = #{memPhone},</if>
+            <if test="buyLesson != null">buy_lesson = #{buyLesson},</if>
+            <if test="restLesson != null">rest_lesson = #{restLesson},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where mem_id = #{memId}
+    </update>
+
+    <delete id="deleteGymMemByMemId" parameterType="Long">
+        delete from gym_mem where mem_id = #{memId}
+    </delete>
+
+<!--    <delete id="deleteGymMemByMemIds" parameterType="String">-->
+<!--        delete from gym_mem where mem_id in-->
+<!--        <foreach item="memId" collection="array" open="(" separator="," close=")">-->
+<!--            #{memId}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+</mapper>

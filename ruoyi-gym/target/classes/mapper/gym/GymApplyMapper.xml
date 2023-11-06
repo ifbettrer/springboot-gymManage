@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gym.mapper.GymApplyMapper">
+
+    <resultMap type="GymApply" id="GymApplyResult">
+        <result property="aplId"    column="apl_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="memName"    column="mem_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGymApplyVo">
+        select apl_id, course_id, course_name, teacher_name, mem_name, start_time, create_by, create_time, update_by, update_time from gym_apply
+    </sql>
+
+    <select id="selectGymApplyList" parameterType="GymApply" resultMap="GymApplyResult">
+        <include refid="selectGymApplyVo"/>
+        <where>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="memName != null  and memName != ''"> and mem_name like concat('%', #{memName}, '%')</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+        </where>
+    </select>
+
+    <select id="selectGymApplyById" parameterType="Long" resultMap="GymApplyResult">
+        <include refid="selectGymApplyVo"/>
+        where apl_id = #{aplId}
+    </select>
+
+    <select id="selectMemApplyList" parameterType="String" resultMap="GymApplyResult">
+        <include refid="selectGymApplyVo"/>
+        where mem_name = #{memName}
+    </select>
+
+    <insert id="insertGymApply" parameterType="GymApply">
+        insert into gym_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="aplId != null">apl_id,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="teacherName != null">teacher_name,</if>
+            <if test="memName != null">mem_name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="aplId != null">#{aplId},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="teacherName != null">#{teacherName},</if>
+            <if test="memName != null">#{memName},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGymApply" parameterType="GymApply">
+        update gym_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="teacherName != null">teacher_name = #{teacherName},</if>
+            <if test="memName != null">mem_name = #{memName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where apl_id = #{aplId}
+    </update>
+
+    <delete id="deleteGymApplyById" parameterType="Long">
+        delete from gym_apply where apl_id = #{aplId}
+    </delete>
+
+    <delete id="deleteGymApplyByIds" parameterType="String">
+        delete from gym_apply where apl_id in
+        <foreach item="aplId" collection="array" open="(" separator="," close=")">
+            #{aplId}
+        </foreach>
+    </delete>
+</mapper>

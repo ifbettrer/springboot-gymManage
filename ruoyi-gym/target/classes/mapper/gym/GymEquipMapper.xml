@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gym.mapper.GymEquipMapper">
+
+    <resultMap type="GymEquip" id="GymEquipResult">
+        <result property="equipId"    column="equip_id"    />
+        <result property="equipName"    column="equip_name"    />
+        <result property="equipStatus"    column="equip_status"    />
+        <result property="equipLoc"    column="equip_loc"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGymEquipVo">
+        select equip_id, equip_name, equip_status, equip_loc, remark, create_by, create_time, update_by, update_time from gym_equip
+    </sql>
+
+    <select id="selectGymEquipList" parameterType="GymEquip" resultMap="GymEquipResult">
+        <include refid="selectGymEquipVo"/>
+        <where>
+            <if test="equipId != null "> and equip_id = #{equipId}</if>
+            <if test="equipName != null  and equipName != ''"> and equip_name like concat('%', #{equipName}, '%')</if>
+            <if test="equipStatus != null "> and equip_status = #{equipStatus}</if>
+            <if test="equipLoc != null  and equipLoc != ''"> and equip_loc = #{equipLoc}</if>
+        </where>
+    </select>
+
+    <select id="selectGymEquipByEquipId" parameterType="Long" resultMap="GymEquipResult">
+        <include refid="selectGymEquipVo"/>
+        where equip_id = #{equipId}
+    </select>
+
+    <insert id="insertGymEquip" parameterType="GymEquip">
+        insert into gym_equip
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="equipId != null">equip_id,</if>
+            <if test="equipName != null and equipName != ''">equip_name,</if>
+            <if test="equipStatus != null">equip_status,</if>
+            <if test="equipLoc != null and equipLoc != ''">equip_loc,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="equipId != null">#{equipId},</if>
+            <if test="equipName != null and equipName != ''">#{equipName},</if>
+            <if test="equipStatus != null">#{equipStatus},</if>
+            <if test="equipLoc != null and equipLoc != ''">#{equipLoc},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGymEquip" parameterType="GymEquip">
+        update gym_equip
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="equipName != null and equipName != ''">equip_name = #{equipName},</if>
+            <if test="equipStatus != null">equip_status = #{equipStatus},</if>
+            <if test="equipLoc != null and equipLoc != ''">equip_loc = #{equipLoc},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where equip_id = #{equipId}
+    </update>
+
+    <delete id="deleteGymEquipByEquipId" parameterType="Long">
+        delete from gym_equip where equip_id = #{equipId}
+    </delete>
+
+    <delete id="deleteGymEquipByEquipIds" parameterType="String">
+        delete from gym_equip where equip_id in
+        <foreach item="equipId" collection="array" open="(" separator="," close=")">
+            #{equipId}
+        </foreach>
+    </delete>
+
+</mapper>
